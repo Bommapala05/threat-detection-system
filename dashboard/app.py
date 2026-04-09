@@ -416,11 +416,14 @@ def show_dashboard():
         # Sort by count descending so highest values are first
         severity_counts = severity_counts.sort_values(by="count", ascending=False).reset_index(drop=True)
 
-        # Map colors dynamically based on count rank (highest receives Red)
-        rank_colors = ["#ff003c", "#ff9d00", "#00ff9f", "#0051ff"]
-        severity_counts["color"] = severity_counts.index.map(
-            lambda i: rank_colors[i] if i < len(rank_colors) else "#ffffff"
-        )
+        # Map colors based on severity
+        color_map = {
+            "CRITICAL": "#ff0000", # Dark Red
+            "HIGH": "#ff003c",     # Red
+            "MEDIUM": "#00ff9f",   # Green
+            "LOW": "#0051ff"       # Blue
+        }
+        severity_counts["color"] = severity_counts["severity"].map(lambda x: color_map.get(str(x).upper(), "#ffffff"))
 
         # Build strict Altair chart to enforce exact color bindings & sort order
         chart = alt.Chart(severity_counts).mark_bar().encode(
