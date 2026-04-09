@@ -418,7 +418,7 @@ def show_dashboard():
 
         # Map colors based on severity
         color_map = {
-            "CRITICAL": "#ff0000", # Dark Red
+            "CRITICAL": "#ffd700", # Yellow
             "HIGH": "#ff003c",     # Red
             "MEDIUM": "#00ff9f",   # Green
             "LOW": "#0051ff"       # Blue
