@@ -1,0 +1,14 @@
+services:
+  - type: web
+    name: threat-detection-system
+    env: docker
+    plan: free
+    disk:
+      name: sqlite-data
+      mountPath: /data
+      sizeGB: 1
+    envVars:
+      - key: DB_PATH
+        value: /data/threats.db
+      - key: OTX_API_KEY
+        value: your_otx_key_here
