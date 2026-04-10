@@ -434,12 +434,16 @@ def show_dashboard():
             "LOW": "#0051ff"       # Blue
         }
         severity_counts["color"] = severity_counts["severity"].map(lambda x: color_map.get(str(x).upper(), "#ffffff"))
+        
+        # Create a display count so that 0-values show a tiny sliver of color
+        severity_counts["display_count"] = severity_counts["count"].apply(lambda x: 0.1 if x == 0 else x)
 
         # Build strict Altair chart to enforce exact color bindings & sort order
         chart = alt.Chart(severity_counts).mark_bar().encode(
             x=alt.X("severity", sort=None, title="Severity Level"),
-            y=alt.Y("count", title="Event Count"),
-            color=alt.Color("color", scale=None)  # scale=None forces literal hex rendering
+            y=alt.Y("display_count", title="Event Count"),
+            color=alt.Color("color", scale=None),  # scale=None forces literal hex rendering
+            tooltip=[alt.Tooltip("severity", title="Severity"), alt.Tooltip("count", title="Exact Count")]
         ).properties(
             height=400
         )
