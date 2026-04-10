@@ -219,7 +219,7 @@ h1, h2, h3 {{
     font-weight: bold;
 }}
 .term-high {{
-    color: #ff9d00;
+    color: #ffd700;
 }}
 
 /* Tab Styling */
@@ -399,7 +399,7 @@ def show_dashboard():
     # TAB 2: CRITICAL THREATS
     with tab_critical:
         st.subheader("🔥 Critical Threats")
-        critical_df = df[df["severity"] == "HIGH"]
+        critical_df = df[df["severity"] == "CRITICAL"]
         if not critical_df.empty:
             st.dataframe(critical_df.tail(10), use_container_width=True)
         else:
@@ -408,6 +408,11 @@ def show_dashboard():
     # TAB 3: THREAT DISTRIBUTION
     with tab_dist:
         st.subheader("📊 Threat Distribution")
+        st.markdown(
+            "**Color Legend:** <span style='color:#ff003c'>■ CRITICAL</span> | <span style='color:#ffd700'>■ HIGH</span> | "
+            "<span style='color:#00ff9f'>■ MEDIUM</span> | <span style='color:#0051ff'>■ LOW</span>", 
+            unsafe_allow_html=True
+        )
         import altair as alt
         
         severity_counts = df["severity"].value_counts().reset_index()
@@ -418,8 +423,8 @@ def show_dashboard():
 
         # Map colors based on severity
         color_map = {
-            "CRITICAL": "#ffd700", # Yellow
-            "HIGH": "#ff003c",     # Red
+            "CRITICAL": "#ff003c", # Red
+            "HIGH": "#ffd700",     # Yellow
             "MEDIUM": "#00ff9f",   # Green
             "LOW": "#0051ff"       # Blue
         }
@@ -439,6 +444,12 @@ def show_dashboard():
     # TAB 4: GLOBAL ATTACKER MAP
     with tab_map:
         st.subheader("🌍 3D Threat Topography")
+        st.markdown(
+            "**Map Legend:** "
+            "<span style='color:rgb(255,0,60)'>🔴 Attack Source (Red)</span> "
+            "➔ <span style='color:rgb(0,255,159)'>🟢 Defense Node (Green)</span>",
+            unsafe_allow_html=True
+        )
         map_df = df.dropna(subset=["lat", "lon"]).copy()
         map_df = map_df[map_df["lat"] != 0]
 
