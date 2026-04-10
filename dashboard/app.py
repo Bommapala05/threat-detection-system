@@ -418,6 +418,11 @@ def show_dashboard():
         severity_counts = df["severity"].value_counts().reset_index()
         severity_counts.columns = ["severity", "count"]
 
+        # Ensure all categories are represented
+        all_severities = pd.DataFrame({"severity": ["CRITICAL", "HIGH", "MEDIUM", "LOW"]})
+        severity_counts = pd.merge(all_severities, severity_counts, on="severity", how="left").fillna(0)
+        severity_counts["count"] = severity_counts["count"].astype(int)
+
         # Sort by count descending so highest values are first
         severity_counts = severity_counts.sort_values(by="count", ascending=False).reset_index(drop=True)
 
